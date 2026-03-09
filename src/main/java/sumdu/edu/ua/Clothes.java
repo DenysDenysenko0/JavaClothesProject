@@ -7,6 +7,8 @@ public class Clothes {
     private String name;
     private String size;
     private double price;
+    private String brand;
+    private int quantity;
 
     public Clothes(String name, String size, double price) {
         this.name = name;
