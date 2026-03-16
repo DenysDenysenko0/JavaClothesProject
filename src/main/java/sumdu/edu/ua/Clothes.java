@@ -1,6 +1,8 @@
 package sumdu.edu.ua;
 
 import java.util.Objects;
+import sumdu.edu.ua.enums.Size;
+import sumdu.edu.ua.enums.Category;
 
 /**
  * Модель елемента одягу.
@@ -8,10 +10,13 @@ import java.util.Objects;
 public class Clothes {
 
     private String name;
-    private String size;
+    private Size size;
     private double price;
     private String brand;
     private int quantity;
+    private Category category;
+
+    private static int createdCount = 0;
 
     /**
      * Створює об'єкт одягу з валідацією.
@@ -23,12 +28,36 @@ public class Clothes {
      * @param quantity кількість
      * @throws IllegalArgumentException якщо дані некоректні
      */
-    public Clothes(String name, String size, double price, String brand, int quantity) {
+    public Clothes(String name, Size size, double price, String brand, int quantity, Category category) {
         setName(name);
         setSize(size);
         setPrice(price);
         setBrand(brand);
         setQuantity(quantity);
+        setCategory(category);
+        createdCount++;
+    }
+
+    /**
+     * Конструктор копіювання.
+     *
+     * @param other об'єкт-джерело
+     */
+    public Clothes(Clothes other) {
+        if (other == null) {
+            throw new IllegalArgumentException("Source object cannot be null");
+        }
+        this.name = other.name;
+        this.size = other.size;
+        this.price = other.price;
+        this.brand = other.brand;
+        this.quantity = other.quantity;
+        this.category = other.category;
+        createdCount++;
+    }
+
+    public static int getCreatedCount() {
+        return createdCount;
     }
 
     public String getName() {
@@ -48,7 +77,7 @@ public class Clothes {
         this.name = name.trim();
     }
 
-    public String getSize() {
+    public Size getSize() {
         return size;
     }
 
@@ -58,11 +87,11 @@ public class Clothes {
      * @param size розмір
      * @throws IllegalArgumentException якщо розмір порожній
      */
-    public void setSize(String size) {
-        if (size == null || size.trim().isEmpty()) {
+    public void setSize(Size size) {
+        if (size == null) {
             throw new IllegalArgumentException("Size cannot be empty");
         }
-        this.size = size.trim();
+        this.size = size;
     }
 
     public double getPrice() {
@@ -116,10 +145,27 @@ public class Clothes {
         this.quantity = quantity;
     }
 
+    public Category getCategory() {
+        return category;
+    }
+
+    /**
+     * Встановлює категорію.
+     *
+     * @param category категорія
+     * @throws IllegalArgumentException якщо категорія порожня
+     */
+    public void setCategory(Category category) {
+        if (category == null) {
+            throw new IllegalArgumentException("Category cannot be empty");
+        }
+        this.category = category;
+    }
+
 
     @Override
     public String toString() {
-        return "Clothes{" + "name='" + name + '\'' + ", size='" + size + '\'' + ", price=" + price + ", brand='" + brand + '\'' + ", quantity=" + quantity + '}';
+        return "Clothes{" + "name='" + name + '\'' + ", category=" + category + ", size=" + size + ", price=" + price + ", brand='" + brand + '\'' + ", quantity=" + quantity + '}';
     }
 
     @Override
@@ -129,7 +175,8 @@ public class Clothes {
         return Double.compare(clothes.price, price) == 0
                 && quantity == clothes.quantity
                 && Objects.equals(name, clothes.name)
-                && Objects.equals(size, clothes.size)
-                && Objects.equals(brand, clothes.brand);
+                && size == clothes.size
+                && Objects.equals(brand, clothes.brand)
+                && category == clothes.category;
     }
 }

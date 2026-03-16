@@ -4,6 +4,8 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+import sumdu.edu.ua.enums.Size;
+import sumdu.edu.ua.enums.Category;
 
 /**
  * Драйвер програми з консольним меню.
@@ -12,7 +14,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<Clothes> clothesList = new ArrayList<>();
+        Wardrobe wardrobe = new Wardrobe("Denys");
         boolean running = true;
 
         while (running) {
@@ -20,13 +22,15 @@ public class Main {
             int choice = readInt(scanner, "Оберіть пункт: ");
 
             switch (choice) {
-                case 1 -> createClothes(scanner, clothesList);
-                case 2 -> printAll(clothesList);
-                case 3 -> {
+                case 1 -> createClothes(scanner, wardrobe);
+                case 2 -> wardrobe.printAll();
+                case 3 -> copyClothesByIndex(scanner, wardrobe);
+                case 4 -> System.out.println("Створено об'єктів Clothes: " + Clothes.getCreatedCount());
+                case 5 -> {
                     running = false;
                     System.out.println("Вихід");
                 }
-                default -> System.out.println("Невірно обраний пункт меню. Число повинно бути 1, 2 або 3");
+                default -> System.out.println("Невірний пункт меню. Число повинно бути 1-5");
             }
         }
 
@@ -39,22 +43,50 @@ public class Main {
     private static void printMenu() {
         System.out.println("\n1. Створити новий об'єкт");
         System.out.println("2. Показати всі об'єкти");
-        System.out.println("3. Вихід");
+        System.out.println("3. Створити копію об'єкта за номером");
+        System.out.println("4. Показати кількість створених об'єктів");
+        System.out.println("5. Вихід");
+    }
+
+    private static Size readSize(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String raw = scanner.nextLine().trim().toUpperCase();
+            try {
+                return Size.valueOf(raw);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Помилка: допустимі XS,S,M,L,XL");
+            }
+        }
+    }
+
+    private static Category readCategory(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String raw = scanner.nextLine().trim().toUpperCase();
+            try {
+                return Category.valueOf(raw);
+            } catch (IllegalArgumentException e) {
+                System.out.println("Помилка: допустимі SHIRT,PANTS,JACKET,DRESS,SHOES");
+            }
+        }
     }
 
     /**
      * Створення об'єктів.
      */
-    private static void createClothes(Scanner scanner, List<Clothes> clothesList) {
+    private static void createClothes(Scanner scanner, Wardrobe wardrobe) {
         try {
             String name = readNonEmptyString(scanner, "Назва: ");
-            String size = readNonEmptyString(scanner, "Розмір: ");
+            Category category = readCategory(scanner, "Категорія (SHIRT, PANTS, HOODIE, JACKET, SHOES, HAT, SHORTS): ");
+            Size size = readSize(scanner, "Розмір (XS, S, M, L, XL): ");
             double price = readDouble(scanner, "Ціна: ");
             String brand = readNonEmptyString(scanner, "Бренд: ");
             int quantity = readInt(scanner, "Кількість: ");
 
-            Clothes clothes = new Clothes(name, size, price, brand, quantity);
-            clothesList.add(clothes);
+            Clothes clothes = new Clothes(name, size, price, brand, quantity, category);
+            wardrobe.addItem(clothes);
+
             System.out.println("Об'єкт створено");
         } catch (IllegalArgumentException e) {
             System.out.println("Помилка валідації: " + e.getMessage());
@@ -62,18 +94,22 @@ public class Main {
     }
 
     /**
-     * Виведення об'єктів.
+     * Копіювання об'єкта.
      */
-    private static void printAll(List<Clothes> clothesList) {
-        if (clothesList.isEmpty()) {
-            System.out.println("Список порожній.");
+    private static void copyClothesByIndex(Scanner scanner, Wardrobe wardrobe) {
+        wardrobe.printAll();
+        int number = readInt(scanner, "Введіть номер елемента для копіювання: ");
+
+        if (number < 1 || number > wardrobe.getItems().size()) {
+            System.out.println("Помилка: невірний номер");
             return;
         }
 
-        System.out.println("\nСписок об'єктів:");
-        for (int i = 0; i < clothesList.size(); i++) {
-            System.out.println((i + 1) + ". " + clothesList.get(i));
-        }
+        Clothes original = wardrobe.getItems().get(number - 1);
+        Clothes copy = new Clothes(original);
+        wardrobe.addItem(copy);
+
+        System.out.println("Копію створено і додано до вашого гардеробу");
     }
 
     /**
