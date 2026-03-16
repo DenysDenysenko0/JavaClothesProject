@@ -3,10 +3,12 @@ package sumdu.edu.ua;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import sumdu.edu.ua.enums.Category;
-import sumdu.edu.ua.enums.Size;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
+
+import sumdu.edu.ua.enums.Category;
+import sumdu.edu.ua.enums.Size;
+
 
 class ClothesTest {
 
