@@ -2,7 +2,6 @@ package sumdu.edu.ua;
 
 import java.util.Objects;
 import sumdu.edu.ua.enums.Size;
-import sumdu.edu.ua.enums.Category;
 
 /**
  * Модель елемента одягу.
@@ -14,9 +13,6 @@ public class Clothes {
     private double price;
     private String brand;
     private int quantity;
-    private Category category;
-
-    private static int createdCount = 0;
 
     /**
      * Створює об'єкт одягу з валідацією.
@@ -28,14 +24,12 @@ public class Clothes {
      * @param quantity кількість
      * @throws IllegalArgumentException якщо дані некоректні
      */
-    public Clothes(String name, Size size, double price, String brand, int quantity, Category category) {
+    public Clothes(String name, Size size, double price, String brand, int quantity) {
         setName(name);
         setSize(size);
         setPrice(price);
         setBrand(brand);
         setQuantity(quantity);
-        setCategory(category);
-        createdCount++;
     }
 
     /**
@@ -52,12 +46,6 @@ public class Clothes {
         this.price = other.price;
         this.brand = other.brand;
         this.quantity = other.quantity;
-        this.category = other.category;
-        createdCount++;
-    }
-
-    public static int getCreatedCount() {
-        return createdCount;
     }
 
     public String getName() {
@@ -145,27 +133,10 @@ public class Clothes {
         this.quantity = quantity;
     }
 
-    public Category getCategory() {
-        return category;
-    }
-
-    /**
-     * Встановлює категорію.
-     *
-     * @param category категорія
-     * @throws IllegalArgumentException якщо категорія порожня
-     */
-    public void setCategory(Category category) {
-        if (category == null) {
-            throw new IllegalArgumentException("Category cannot be empty");
-        }
-        this.category = category;
-    }
-
 
     @Override
     public String toString() {
-        return "Clothes{" + "name='" + name + '\'' + ", category=" + category + ", size=" + size + ", price=" + price + ", brand='" + brand + '\'' + ", quantity=" + quantity + '}';
+        return "Clothes{" + "name='" + name + '\'' + ", size=" + size + ", price=" + price + ", brand='" + brand + '\'' + ", quantity=" + quantity + '}';
     }
 
     @Override
@@ -176,7 +147,6 @@ public class Clothes {
                 && quantity == clothes.quantity
                 && Objects.equals(name, clothes.name)
                 && size == clothes.size
-                && Objects.equals(brand, clothes.brand)
-                && category == clothes.category;
+                && Objects.equals(brand, clothes.brand);
     }
 }
