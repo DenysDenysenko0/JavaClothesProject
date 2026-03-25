@@ -30,4 +30,14 @@ class ClothesTest {
         assertEquals(original, copy);
         assertNotSame(original, copy);
     }
+
+    @Test
+    void shouldThrowExceptionWhenSleeveLengthInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> new Shirts("Vyshyvanka", Size.L, 500, "Merezhka", 3, -5));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenWaistSizeInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> new Pants("Sport Pants", Size.M, 1000, "Nike", 2, 0));
+    }
 }
