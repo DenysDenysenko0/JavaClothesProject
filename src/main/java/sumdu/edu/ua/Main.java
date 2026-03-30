@@ -60,6 +60,9 @@ public class Main {
         System.out.println("3. Вихід");
     }
 
+    /**
+     * Створення звичайного одягу.
+     */
     private static void createBaseClothes(Scanner scanner, List<Clothes> list) {
         try {
             String name = readNonEmptyString(scanner, "Назва: ");
@@ -75,6 +78,9 @@ public class Main {
         }
     }
 
+    /**
+     * Створення штанів.
+     */
     private static void createPants(Scanner scanner, List<Clothes> list) {
         try {
             String name = readNonEmptyString(scanner, "Назва: ");
@@ -91,6 +97,9 @@ public class Main {
         }
     }
 
+    /**
+     * Створення курток.
+     */
     private static void createJackets(Scanner scanner, List<Clothes> list) {
         try {
             String name = readNonEmptyString(scanner, "Назва: ");
@@ -107,6 +116,9 @@ public class Main {
         }
     }
 
+    /**
+     * Створення черевиків.
+     */
     private static void createShoes(Scanner scanner, List<Clothes> list) {
         try {
             String name = readNonEmptyString(scanner, "Назва: ");
@@ -123,6 +135,9 @@ public class Main {
         }
     }
 
+    /**
+     * Створення сорочок.
+     */
     private static void createShirts(Scanner scanner, List<Clothes> list) {
         try {
             String name = readNonEmptyString(scanner, "Назва: ");
@@ -189,6 +204,9 @@ public class Main {
         }
     }
 
+    /**
+     * Зчитує непорожній рядок.
+     */
     private static String readNonEmptyString(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -200,6 +218,9 @@ public class Main {
         }
     }
 
+    /**
+     * Зчитує розміру XS, S, M, L або XL.
+     */
     private static Size readSize(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -212,6 +233,9 @@ public class Main {
         }
     }
 
+    /**
+     * Зчитує boolean true або false.
+     */
     private static boolean readBoolean(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
