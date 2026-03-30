@@ -40,4 +40,15 @@ class ClothesTest {
     void shouldThrowExceptionWhenWaistSizeInvalid() {
         assertThrows(IllegalArgumentException.class, () -> new Pants("Sport Pants", Size.M, 1000, "Nike", 2, 0));
     }
+
+    @Test
+    void shouldThrowExceptionWhenSoleMaterialInvalid() {
+        assertThrows(IllegalArgumentException.class, () -> new Shoes("Flipers", Size.M, 300, "Puma", 2, ""));
+    }
+
+    @Test
+    void shouldSetHasHoodCorrectly() {
+        Jackets jacket = new Jackets("Winter Jacket", Size.S, 3000, "Columbia", 10, true);
+        assertEquals(true, jacket.isHasHood());
+    }
 }
