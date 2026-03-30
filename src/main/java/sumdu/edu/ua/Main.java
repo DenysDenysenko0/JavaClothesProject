@@ -21,26 +21,43 @@ public class Main {
             int choice = readInt(scanner, "Оберіть пункт: ");
 
             switch (choice) {
-                case 1 -> createBaseClothes(scanner, clothesList);
-                case 2 -> createPants(scanner, clothesList);
-                case 3 -> createShirts(scanner, clothesList);
-                case 4 -> printAll(clothesList);
-                case 5 -> {
+                case 1 -> createObjectMenu(scanner, clothesList);
+                case 2 -> printAll(clothesList);
+                case 3 -> {
                     running = false;
                     System.out.println("Вихід");
                 }
-                default -> System.out.println("Невірний пункт меню. Число повинно бути 1-5");
+                default -> System.out.println("Невірний пункт меню. Число повинно бути 1-3");
             }
         }
         scanner.close();
     }
 
+    private static void createObjectMenu(Scanner scanner, List<Clothes> list) {
+
+        System.out.println("\nОберіть тип об'єкта:");
+        System.out.println("1. Clothes");
+        System.out.println("2. Pants");
+        System.out.println("3. Shirts");
+        System.out.println("4. Jackets");
+        System.out.println("5. Shoes");
+
+        int choice = readInt(scanner, "Оберіть пункт: ");
+
+        switch (choice) {
+            case 1 -> createBaseClothes(scanner, list);
+            case 2 -> createPants(scanner, list);
+            case 3 -> createShirts(scanner, list);
+            case 4 -> createJackets(scanner, list);
+            case 5 -> createShoes(scanner, list);
+            default -> System.out.println("Невірний вибір типу.");
+        }
+    }
+
     private static void printMenu() {
-        System.out.println("\n1. Створити Clothes");
-        System.out.println("2. Створити Pants");
-        System.out.println("3. Створити Shirts");
-        System.out.println("4. Показати всі об'єкти");
-        System.out.println("5. Вихід");
+        System.out.println("\n1. Створити новий об'єкт");
+        System.out.println("2. Показати всі об'єкти");
+        System.out.println("3. Вихід");
     }
 
     private static void createBaseClothes(Scanner scanner, List<Clothes> list) {
@@ -69,6 +86,38 @@ public class Main {
 
             list.add(new Pants(name, size, price, brand, quantity, waistSize));
             System.out.println("Pants створено");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Помилка валідації: " + e.getMessage());
+        }
+    }
+
+    private static void createJackets(Scanner scanner, List<Clothes> list) {
+        try {
+            String name = readNonEmptyString(scanner, "Назва: ");
+            Size size = readSize(scanner, "Розмір (XS, S, M, L, XL): ");
+            double price = readDouble(scanner, "Ціна: ");
+            String brand = readNonEmptyString(scanner, "Бренд: ");
+            int quantity = readInt(scanner, "Кількість: ");
+            boolean hasHood = readBoolean(scanner, "Чи є капюшон? (true/false): ");
+
+            list.add(new Jackets(name, size, price, brand, quantity, hasHood));
+            System.out.println("Jackets створено");
+        } catch (IllegalArgumentException e) {
+            System.out.println("Помилка валідації: " + e.getMessage());
+        }
+    }
+
+    private static void createShoes(Scanner scanner, List<Clothes> list) {
+        try {
+            String name = readNonEmptyString(scanner, "Назва: ");
+            Size size = readSize(scanner, "Розмір (XS, S, M, L, XL): ");
+            double price = readDouble(scanner, "Ціна: ");
+            String brand = readNonEmptyString(scanner, "Бренд: ");
+            int quantity = readInt(scanner, "Кількість: ");
+            String soleMaterial = readNonEmptyString(scanner, "Матеріал підошви: ");
+
+            list.add(new Shoes(name, size, price, brand, quantity, soleMaterial));
+            System.out.println("Shoes створено");
         } catch (IllegalArgumentException e) {
             System.out.println("Помилка валідації: " + e.getMessage());
         }
@@ -105,6 +154,7 @@ public class Main {
             System.out.println((i + 1) + ". " + item);
         }
     }
+
     /**
      * Безпечне зчитування int з обробкою нечислового вводу.
      */
@@ -121,6 +171,7 @@ public class Main {
             }
         }
     }
+
     /**
      * Безпечне зчитування double з обробкою нечислового вводу.
      */
@@ -137,9 +188,7 @@ public class Main {
             }
         }
     }
-    /**
-     * Зчитує непорожній рядок.
-     */
+
     private static String readNonEmptyString(Scanner scanner, String prompt) {
         while (true) {
             System.out.print(prompt);
@@ -160,6 +209,22 @@ public class Main {
             } catch (IllegalArgumentException e) {
                 System.out.println("Помилка: допустимі XS,S,M,L,XL");
             }
+        }
+    }
+
+    private static boolean readBoolean(Scanner scanner, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            String value = scanner.nextLine().trim().toLowerCase();
+
+            if (value.equals("true")) {
+                return true;
+            }
+            if (value.equals("false")) {
+                return false;
+            }
+
+            System.out.println("Помилка, введіть true або false");
         }
     }
 }
