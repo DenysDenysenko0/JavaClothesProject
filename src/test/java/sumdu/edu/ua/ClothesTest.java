@@ -51,4 +51,10 @@ class ClothesTest {
         Jackets jacket = new Jackets("Winter Jacket", Size.S, 3000, "Columbia", 10, true);
         assertEquals(true, jacket.isHasHood());
     }
+
+    @Test
+    void shouldCreateShoesWithValidSoleMaterial() {
+        Shoes shoes = new Shoes("Flops", Size.M, 1000, "Puma", 2, "Rubber");
+        assertEquals("Rubber", shoes.getSoleMaterial());
+    }
 }
