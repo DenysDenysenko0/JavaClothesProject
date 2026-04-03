@@ -13,8 +13,9 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        List<Clothes> clothesList = new ArrayList<Clothes>();
+        List<Clothes> clothesList = ClothesJsonStorage.loadFromJson("input.json");
         boolean running = true;
+        System.out.println("Завантажено" + clothesList.size() + " об'єктів з JSON файлу");
 
         while (running) {
             printMenu();
@@ -24,6 +25,7 @@ public class Main {
                 case 1 -> createObjectMenu(scanner, clothesList);
                 case 2 -> printAll(clothesList);
                 case 3 -> {
+                    ClothesJsonStorage.saveToJson(clothesList, "input.json");
                     running = false;
                     System.out.println("Вихід");
                 }
