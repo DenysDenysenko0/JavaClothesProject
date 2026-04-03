@@ -1,0 +1,10 @@
+[
+  {
+    "type": "Clothes",
+    "name": "Hoodie",
+    "size": "M",
+    "price": 1000,
+    "brand": "Nike",
+    "quantity": 10
+  }
+]
