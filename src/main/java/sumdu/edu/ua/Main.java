@@ -22,17 +22,148 @@ public class Main {
             int choice = readInt(scanner, "Оберіть пункт: ");
 
             switch (choice) {
-                case 1 -> createObjectMenu(scanner, clothesList);
-                case 2 -> printAll(clothesList);
-                case 3 -> {
+                case 1 -> searchMenu(scanner, clothesList);
+                case 2 -> createObjectMenu(scanner, clothesList);
+                case 3 -> printAll(clothesList);
+                case 4 -> {
                     ClothesJsonStorage.saveToJson(clothesList, "src/main/java/sumdu/edu/ua/input.json");
                     running = false;
                     System.out.println("Вихід");
                 }
-                default -> System.out.println("Невірний пункт меню. Число повинно бути 1-3");
+                default -> System.out.println("Невірний пункт меню. Число повинно бути 1-4");
             }
         }
         scanner.close();
+    }
+
+    private static void searchMenu(Scanner scanner, List<Clothes> list) {
+        boolean searching = true;
+
+        while (searching) {
+            System.out.println("\nПошук об'єкта:");
+            System.out.println("1. Пошук за брендом");
+            System.out.println("2. Пошук за розміром");
+            System.out.println("3. Пошук за діапазоном ціни");
+            System.out.println("4. Пошук за типом об'єкта");
+            System.out.println("5. Повернутися в головне меню");
+
+            int choice = readInt(scanner, "Оберіть пункт: ");
+
+            switch (choice) {
+                case 1 -> printSearchResults(searchByBrand(scanner, list));
+                case 2 -> printSearchResults(searchBySize(scanner, list));
+                case 3 -> printSearchResults(searchByPriceRange(scanner, list));
+                case 4 -> printSearchResults(searchByType(scanner, list));
+                case 5 -> searching = false;
+                default -> System.out.println("Невірний пункт меню. Число повинно бути 1-5");
+            }
+        }
+    }
+
+    private static List<Clothes> searchByBrand(Scanner scanner, List<Clothes> list) {
+        String brand = readNonEmptyString(scanner, "Введіть бренд для пошуку: ");
+        List<Clothes> result = new ArrayList<Clothes>();
+
+        int i;
+        for (i = 0; i < list.size(); i++) {
+            Clothes item = list.get(i);
+            if (item.getBrand().equalsIgnoreCase(brand)) {
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
+    private static List<Clothes> searchBySize(Scanner scanner, List<Clothes> list) {
+        Size size = readSize(scanner, "Введіть розмір (XS, S, M, L, XL): ");
+        List<Clothes> result = new ArrayList<Clothes>();
+
+        int i;
+        for (i = 0; i < list.size(); i++) {
+            Clothes item = list.get(i);
+            if (item.getSize() == size) {
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
+    private static List<Clothes> searchByPriceRange(Scanner scanner, List<Clothes> list) {
+        double minPrice = 0;
+        double maxPrice = 1;
+        List<Clothes> result = new ArrayList<Clothes>();
+
+        minPrice = readDouble(scanner, "Введіть мінімальну ціну: ");
+        maxPrice = readDouble(scanner, "Введіть максимальну ціну: ");
+
+        while (minPrice > maxPrice) {
+            System.out.println("Мінімальна ціна не може бути більшою за максимум");
+            minPrice = readDouble(scanner, "Введіть мінімальну ціну: ");
+            maxPrice = readDouble(scanner, "Введіть максимальну ціну: ");
+        }
+
+        int i;
+        for (i = 0; i < list.size(); i++) {
+            Clothes item = list.get(i);
+            if (item.getPrice() >= minPrice && item.getPrice() <= maxPrice) {
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
+    private static List<Clothes> searchByType(Scanner scanner, List<Clothes> list) {
+        System.out.println("Оберіть тип:");
+        System.out.println("1. Clothes");
+        System.out.println("2. Pants");
+        System.out.println("3. Shirts");
+        System.out.println("4. Jackets");
+        System.out.println("5. Shoes");
+
+        int choice = 1;
+        choice = readInt(scanner, "Оберіть тип: ");
+        List<Clothes> result = new ArrayList<Clothes>();
+
+        while (choice > 5 || choice < 1) {
+            System.out.println("Невірний пункт меню. Число повинно бути 1-5");
+            choice = readInt(scanner, "Оберіть тип: ");
+        }
+
+        int i;
+        for (i = 0; i < list.size(); i++) {
+            Clothes item = list.get(i);
+
+            if (choice == 1 && item.getClass() == Clothes.class) {
+                result.add(item);
+            } else if (choice == 2 && item instanceof Pants) {
+                result.add(item);
+            } else if (choice == 3 && item instanceof Shirts) {
+                result.add(item);
+            } else if (choice == 4 && item instanceof Jackets) {
+                result.add(item);
+            } else if (choice == 5 && item instanceof Shoes) {
+                result.add(item);
+            }
+        }
+
+        return result;
+    }
+
+    private static void printSearchResults(List<Clothes> result) {
+        if (result.isEmpty()) {
+            System.out.println("Нічого не знайдено");
+            return;
+        }
+
+        System.out.println("Знайдені об'єкти:");
+
+        int i;
+        for (i = 0; i < result.size(); i++) {
+            System.out.println((i + 1) + ". " + result.get(i));
+        }
     }
 
     private static void createObjectMenu(Scanner scanner, List<Clothes> list) {
@@ -57,9 +188,10 @@ public class Main {
     }
 
     private static void printMenu() {
-        System.out.println("\n1. Створити новий об'єкт");
-        System.out.println("2. Показати всі об'єкти");
-        System.out.println("3. Вихід");
+        System.out.println("\n1. Пошук об'єкта");
+        System.out.println("2. Створити новий об'єкт");
+        System.out.println("3. Показати всі об'єкти");
+        System.out.println("4. Вихід");
     }
 
     /**
