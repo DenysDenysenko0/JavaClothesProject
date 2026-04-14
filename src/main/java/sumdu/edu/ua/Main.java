@@ -22,17 +22,42 @@ public class Main {
             int choice = readInt(scanner, "Оберіть пункт: ");
 
             switch (choice) {
-                case 1 -> createObjectMenu(scanner, clothesList);
-                case 2 -> printAll(clothesList);
-                case 3 -> {
+                case 1 -> searchMenu(scanner, clothesList);
+                case 2 -> createObjectMenu(scanner, clothesList);
+                case 3 -> printAll(clothesList);
+                case 4 -> {
                     ClothesJsonStorage.saveToJson(clothesList, "src/main/java/sumdu/edu/ua/input.json");
                     running = false;
                     System.out.println("Вихід");
                 }
-                default -> System.out.println("Невірний пункт меню. Число повинно бути 1-3");
+                default -> System.out.println("Невірний пункт меню. Число повинно бути 1-4");
             }
         }
         scanner.close();
+    }
+
+    private static void searchMenu(Scanner scanner, List<Clothes> list) {
+        boolean searching = true;
+
+        while (searching) {
+            System.out.println("\nПошук об'єкта:");
+            System.out.println("1. Пошук за брендом");
+            System.out.println("2. Пошук за розміром");
+            System.out.println("3. Пошук за діапазоном ціни");
+            System.out.println("4. Пошук за типом об'єкта");
+            System.out.println("5. Повернутися в головне меню");
+
+            int choice = readInt(scanner, "Оберіть пункт: ");
+
+            switch (choice) {
+                case 1 -> printSearchResults(searchByBrand(scanner, list));
+                case 2 -> printSearchResults(searchBySize(scanner, list));
+                case 3 -> printSearchResults(searchByPriceRange(scanner, list));
+                case 4 -> printSearchResults(searchByType(scanner, list));
+                case 5 -> searching = false;
+                default -> System.out.println("Невірний пункт меню. Число повинно бути 1-5");
+            }
+        }
     }
 
     private static void createObjectMenu(Scanner scanner, List<Clothes> list) {
@@ -57,9 +82,10 @@ public class Main {
     }
 
     private static void printMenu() {
-        System.out.println("\n1. Створити новий об'єкт");
-        System.out.println("2. Показати всі об'єкти");
-        System.out.println("3. Вихід");
+        System.out.println("\n1. Пошук об'єкта");
+        System.out.println("2. Створити новий об'єкт");
+        System.out.println("3. Показати всі об'єкти");
+        System.out.println("4. Вихід");
     }
 
     /**
